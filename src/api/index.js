@@ -13,17 +13,14 @@ export const reqShops = (latitude,longitude) => ajax(BASE + '/shops',{latitude,l
 //[4、根据经纬度和关键字搜索商铺列表](#4根据经纬度和关键字搜索商铺列表)<br/>
 export const reqSearchShops = (keyword,geohash) => ajax(BASE + '/search_shops',{keyword,geohash})
 
-//[5、获取一次性验证码](#5获取一次性验证码)<br/>
-export const reqCaptcha = () => ajax(BASE + '/captcha')
-
 //[6、用户名密码登陆](#6用户名密码登陆)<br/>
-export const reqLoginPwd = (name,pwd) => ajax(BASE + '/login_pwd',{name,pwd},'POST')
+export const reqLoginPwd = ({name,pwd,captcha}) => ajax(BASE + '/login_pwd',{name,pwd,captcha},'POST')
 
 //[7、发送短信验证码](#7发送短信验证码)<br/>
 export const reqSendcode = phone => ajax(BASE + '/sendcode',{phone})
 
 //[8、手机号验证码登陆](#8手机号验证码登陆)<br/>
-export const reqLoginSms = (phone,code) => ajax(BASE + '/login_sms',{phone,code},'POST')
+export const reqLoginSms = ({phone,code}) => ajax(BASE + '/login_sms',{phone,code},'POST')
 
 //[9、根据会话获取用户信息](#9根据会话获取用户信息)<br/>
 export const reqUserInfo = () => ajax(BASE + '/userinfo')

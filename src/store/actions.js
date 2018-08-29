@@ -1,7 +1,8 @@
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORIES,
-  RECEIVE_SHOPS
+  RECEIVE_SHOPS,
+  RECEIVE_USERINFO
 } from './mutation-types'
 
 import {
@@ -27,6 +28,9 @@ export default {
     const {latitude,longitude} = state
     const result = await reqShops(latitude,longitude)
     const shops = result.data
-    commit(RECEIVE_ADDRESS,{shops})
+    commit(RECEIVE_SHOPS,{shops})
+  },
+  getUserInfo ({commit},user){
+    commit(RECEIVE_USERINFO,{user})
   }
 }
