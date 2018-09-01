@@ -90,14 +90,26 @@
         </div>
       </a>
     </section>
+
+    <section class="profile_my_order" v-show="user._id">
+      <!--//注销登录按钮-->
+      <mt-button type="danger" style='width: 100%' @click="logout">退出登录</mt-button>
+    </section>
   </section>
 </template>
 
 <script>
   import {mapState} from 'vuex'
+  import MtButton from "../../../node_modules/mint-ui/packages/button/src/button.vue";
   export default {
+    components: {MtButton},
     computed: {
       ...mapState(['user'])
+    },
+    methods: {
+      logout (){
+        this.$store.dispatch('resetUser')
+      }
     }
   }
 </script>

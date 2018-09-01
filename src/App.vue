@@ -7,11 +7,12 @@
 
 <script>
   import FooterGuide from './components/FooterGuide/FooterGuide.vue'
-
+  import {reqShopInfo} from './api'
   export default {
     components:{FooterGuide},
-    mounted (){
+    async mounted (){
       this.$store.dispatch('getAddress')
+      this.$store.dispatch('getUserInfo')
     }
   }
 </script>

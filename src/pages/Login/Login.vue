@@ -134,7 +134,7 @@
         }
         //登录成功，将user信息保存到state，跳转到用户中心
         if(result.code === 0){
-          this.$store.dispatch('getUserInfo',result.data)
+          this.$store.dispatch('updateUser',result.data)
           this.$router.push('/profile')
         }else {
           //登录失败

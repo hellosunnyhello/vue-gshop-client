@@ -27,3 +27,12 @@ export const reqUserInfo = () => ajax(BASE + '/userinfo')
 
 //[10、用户登出](#10用户登出)<br/>
 export const reqLogout = () => ajax(BASE + '/logout')
+
+//获取商家的商品
+export const reqShopGoods = () => ajax('/shop_goods')
+
+//获取商家的评分
+export const reqShopRatings = () => ajax('/shop_ratings')
+
+//获取商家的详情
+export const reqShopInfo = () => ajax('/shop_info')
