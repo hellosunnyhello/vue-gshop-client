@@ -15,10 +15,12 @@
       </div>
       <div class="foods-wrapper">
         <ul ref="foodList">
-          <li class="food-list food-list-hook" v-for="(good,index) in goods" :key="index">
+          <li class="food-list food-list-hook"
+              v-for="(good,index) in goods" :key="index">
             <h1 class="title">{{good.name}}</h1>
             <ul>
-              <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods" :key="index">
+              <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods"
+                  :key="index" @click="showFood(food)">
                 <div class="icon">
                   <img width="57" height="57" :src="food.image">
                 </div>
@@ -42,8 +44,9 @@
           </li>
         </ul>
       </div>
+      <shop-cart />
     </div>
-    <shop-cart />
+    <Food ref="food" :food="food"/>
   </div>
 </template>
 
@@ -52,11 +55,13 @@
   import BScroll from 'better-scroll'
   import CartControl from '../../../components/CartControl/CartControl.vue'
   import ShopCart from '../../../components/ShopCart/ShopCart.vue'
+  import Food from '../../../components/Food/Food.vue'
   export default {
     data() {
       return {
         scrollY: 0,
-        tops: []
+        tops: [],
+        food: {}
       }
     },
     mounted(){
@@ -104,6 +109,11 @@
           const menuLi = this.$refs.menu.getElementsByClassName('menu-item')
           this.menuScroll.scrollToElement(menuLi[index],200)
         }
+      },
+      showFood (food){
+        const foodComponent = this.$refs.food
+        this.food = food
+        foodComponent.toggleShow()
       }
     },
     computed: {
@@ -122,7 +132,7 @@
         return index
       }
     },
-    components:{CartControl,ShopCart}
+    components:{CartControl,ShopCart,Food}
   }
 </script>
 
@@ -131,7 +141,7 @@
   .goods
     display: flex
     position: absolute
-    top: 275px
+    top: 240px
     bottom: 46px
     width: 100%
     background: #fff;

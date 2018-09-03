@@ -133,7 +133,7 @@
     .shop-nav
       background-size cover
       background-repeat no-repeat
-      height 70px
+      height 50px
       padding 5px 10px
       position relative
       &::before
@@ -250,7 +250,7 @@
       padding 5px 7px
       font-size 11px
       color #666
-      margin 0 30px 20px 30px
+      margin 0 30px 10px 30px
       align-items center
       .discounts-left
         flex 1

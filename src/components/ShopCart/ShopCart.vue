@@ -4,52 +4,55 @@
       <div class="content">
         <div class="content-left">
           <div class="logo-wrapper">
-            <div class="logo highlight" @click="toggleShow">
+            <div class="logo" @click="toggleShow" :class="{highlight: totalCount}">
               <i class="iconfont icon-shopping_cart highlight"></i>
             </div>
             <div class="num">{{totalCount}}</div>
           </div>
-          <div class="price highlight">￥{{totalPrice}}</div>
+          <div class="price highlight">￥{{totalPrice ? totalPrice:'未选购'}}</div>
           <div class="desc">另需配送费￥{{info.deliveryPrice}}元</div>
         </div>
         <div class="content-right">
-          <div class="pay not-enough">
-            还差￥10元起送
+          <div class="pay" :class="payClass" @click="pay">
+            {{payShow}}
           </div>
         </div>
       </div>
-      <div class="shopcart-list" v-show="isShowList">
-        <div class="list-header">
-          <h1 class="title">购物车</h1>
-          <span class="empty">清空</span>
-        </div>
-        <div class="list-content">
-          <ul>
-            <li class="food" v-for="(food,index) in shopCart" :key="index">
-              <span class="name">{{food.name}}</span>
-              <div class="price"><span>￥{{food.price}}</span></div>
-              <div class="cartcontrol-wrapper">
-                <div class="cartcontrol">
-                  <div class="iconfont icon-remove_circle_outline"></div>
-                  <div class="cart-count">{{food.count}}</div>
-                  <div class="iconfont icon-add_circle"></div>
+      <transition name="move">
+        <div class="shopcart-list" v-show="isShowList">
+          <div class="list-header">
+            <h1 class="title">购物车</h1>
+            <span class="empty" @click="ClearCart">清空</span>
+          </div>
+          <div class="list-content">
+            <ul>
+              <li class="food" v-for="(food,index) in shopCart" :key="index">
+                <span class="name">{{food.name}}</span>
+                <div class="price"><span>￥{{food.price}}</span></div>
+                <div class="cartcontrol-wrapper">
+                  <cart-control :food="food"/>
                 </div>
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
-    <div class="list-mask" v-show="isShowList" @click="toggleShow"></div>
+    <transition name="fade">
+      <div class="list-mask" v-show="isShowList" @click="toggleShow"></div>
+    </transition>
   </div>
 </template>
 
 <script>
   import {mapState,mapGetters} from 'vuex'
+  import CartControl from '../CartControl/CartControl.vue'
+  import BScroll from 'better-scroll'
+  import {Toast,MessageBox} from 'mint-ui'
   export default {
     data() {
       return {
-        isShow: false
+        isShow: false,
       }
     },
     computed: {
@@ -60,16 +63,64 @@
           this.isShow = false
           return false
         }
+        if(this.isShow){
+          this.$nextTick(()=>{
+            if(!this.scroll){
+              this.scroll = new BScroll('.list-content')
+            }else {
+              this.scroll.refresh()
+            }
+          })
+        }
         return this.isShow
+      },
+      payShow (){
+        const {totalCount, info, totalPrice} = this
+        const {minPrice} = info
+        let result = ''
+        if(totalCount === 0){
+          result = `￥${minPrice}起送`
+        }else if(totalPrice < minPrice){
+          const payLess = minPrice - totalPrice
+          result = `还差￥${payLess}起送`
+        }else {
+          result = '去结算'
+        }
+        return result
+      },
+      payClass (){
+        let payEnoughClass = ''
+        const {info, totalPrice} = this
+        const {minPrice} = info
+        if(totalPrice>=minPrice){
+          payEnoughClass = 'enough'
+        }else {
+          payEnoughClass = 'not-enough'
+        }
+        return payEnoughClass
       }
     },
     methods: {
       toggleShow (){
-        if(this.totalCount){
-          this.isShow = !this.isShow
-        }
+          if(this.totalCount){
+            this.isShow = !this.isShow
+          }
+      },
+      pay (){
+        const payTotal = `需要支付${this.totalPrice}元`
+        Toast(payTotal)
+      },
+      ClearCart (){
+        MessageBox.confirm('确定要清除购物车吗')
+          .then(action => {
+            this.$store.dispatch('ClearCart')
+            Toast('清除成功')
+          })
+          .catch(msg => console.log('点击了取消'))
+
       }
-    }
+    },
+    components: {CartControl}
 
   }
 </script>
@@ -169,6 +220,10 @@
       z-index: -1
       width: 100%
       transform translateY(-100%)
+      &.move-enter,&.move-leave-to
+        transform translateY(0)
+      &.move-enter-active,&.move-leave-active
+        transition transform .5s
       .list-header
         height: 40px
         line-height: 40px

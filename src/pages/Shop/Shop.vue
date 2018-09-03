@@ -25,7 +25,6 @@
     },
     components:{ShopHeader},
     mounted (){
-      this.$store.dispatch('getShopRatings')
       this.$store.dispatch('getShopInfo')
     }
   }

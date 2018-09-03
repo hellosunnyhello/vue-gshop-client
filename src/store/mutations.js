@@ -9,7 +9,8 @@ import {
   RECEIVE_SHOP_RATINGS,
   RECEIVE_SHOP_INFO,
   INCREMENT_FOOD_COUNT,
-  DECREMENT_FOOD_COUNT
+  DECREMENT_FOOD_COUNT,
+  CLEAR_SHOP_CART
 } from './mutation-types'
 import Vue from 'vue'
 export default {
@@ -60,4 +61,9 @@ export default {
       }
     }
   },
+  [CLEAR_SHOP_CART] (state){
+    //先把数组中各项的count设置为0
+    state.shopCart.forEach(food => food.count = 0)
+    state.shopCart = []
+  }
 }
