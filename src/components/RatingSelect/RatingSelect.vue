@@ -43,12 +43,14 @@
         let ratings = this.upRatings
         this.isActive = [false,true,false]
         this.$emit('toggleSelect',{selectType: 1, hasContent})
+
       },
       selectDownRatings (){
         const {hasContent} = this
         let ratings = this.downRatings
         this.isActive = [false,false,true]
         this.$emit('toggleSelect',{selectType: 2, hasContent})
+
       },
       toggleHasContent (){
         this.hasContent = !this.hasContent

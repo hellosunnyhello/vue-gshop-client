@@ -76,13 +76,6 @@
     },
     computed: {
       ...mapState(['info']),
-      setUlWidth (){
-        const ul = this.$refs.picUl
-        const space = 6
-        const listLi = 120
-        const size = this.info.pics.length
-        ul.style.width = listLi*size+space*(size-1) + 'px'
-      }
     },
     mounted (){
       this.$nextTick(()=>{
@@ -91,18 +84,29 @@
           click: true,
           scrollX: true,
         })
-        this.info.pics && this.setUlWidth()
+        this.info.pics && this.setPicUlWidth()
       })
     },
     watch: {
       info (){
+        console.log(this.info.pics.length)
         this.$nextTick(()=>{
           this.infoScroll.refresh()
-          this.setUlWidth()
+          this.setPicUlWidth()
           this.shopPicScroll.refresh()
         })
       }
+    },
+    methods: {
+      setPicUlWidth (){
+        const ul = this.$refs.picUl
+        const space = 6
+        const listLi = 120
+        const size = this.info.pics.length
+        ul.style.width = listLi*size+space*(size-1) + 'px'
+      }
     }
+
   }
 </script>
 
